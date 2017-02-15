@@ -11,7 +11,6 @@ from sklearn.model_selection import train_test_split
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Lambda, MaxPooling2D, Activation
 from keras.layers.convolutional import Convolution2D
-from keras.layers.advanced_activations import ELU
 from keras.optimizers import Adam
 from sklearn.utils import shuffle
 
@@ -162,10 +161,10 @@ def main():
         print("Finished Epoch #", (i + 1))
     
     json_string = model.to_json()
-    with open('model.json', 'w') as outfile:
+    with open('model_1.json', 'w') as outfile:
         json.dump(json_string, outfile)
     
-    model.save("model.h5")
+    model.save("model_1.h5")
     
     pass
 
