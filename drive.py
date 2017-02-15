@@ -8,6 +8,7 @@ import numpy as np
 import socketio
 import eventlet
 import eventlet.wsgi
+import cv2
 from PIL import Image
 from flask import Flask
 from io import BytesIO
@@ -61,8 +62,12 @@ def telemetry(sid, data):
         imgString = data["image"]
         image = Image.open(BytesIO(base64.b64decode(imgString)))
         image_array = np.asarray(image)
-        steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
+        shape = image_array.shape
+        image_array = image_array[int(shape[0] * 0.2):int(shape[0] * 0.8), 0:shape[1]]
+        image_array = cv2.resize(image_array, (64, 64))
+        transformed_image_array = image_array[None, :, :, :]
 
+        steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
         throttle = controller.update(float(speed))
 
         print(steering_angle, throttle)
